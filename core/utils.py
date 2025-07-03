@@ -1,0 +1,25 @@
+import os
+import shutil
+from core.error import print_error
+
+def generate_new_filename(base_path):
+    name, ext = os.path.splitext(base_path)
+    counter = 1
+    new_path = f"{name}_cut{ext}"
+    while os.path.exists(new_path):
+        new_path = f"{name}_cut_{counter}{ext}"
+        counter += 1
+    return new_path
+
+def check_disk_space(file_path):
+    try:
+        total, used, free = shutil.disk_usage(os.path.dirname(file_path) or ".")
+        input_size = os.path.getsize(file_path)
+        if free < input_size * 2:
+            print_error("ERR_101", "You don't have enough space for it.")
+    except Exception:
+        print_error("ERR_102", "Failed to check disk space.")
+
+def is_supported_file(file_path):
+    ext = os.path.splitext(file_path)[1].lower()
+    return ext in ['.mp4', '.mp3', '.wav']
