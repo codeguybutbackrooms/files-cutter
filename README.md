@@ -7,6 +7,12 @@ Inspired by `yt-dlp`, built for clean offline media slicing — no pip install r
 
 ## <a href="https://github.com/codeguybutbackrooms/files-cutter/releases/tag/files-cutter">📁 Install it.</a>
 ---
+## 🛠️ How to Set Up
+### 📦 Step-by-Step:
+1. Install the repo by the link
+2. Right-click on the file, choose it, click "Extract Here", it will create a folder name: `files-cutter-main`
+3. Click Windows, type "Command Prompt"
+4. Copy this code to paste in ```cd %USERPROFILE%\Downloads\files-cutter-main```
 
 ## ✨ Features
 
