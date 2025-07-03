@@ -6,7 +6,7 @@ Inspired by `yt-dlp`, built for clean offline media slicing — no pip install r
 ---
 
 ## Installations
-![Install](https://github.com/codeguybutbackrooms/files-cutter/releases/tag/files-cutter)
+![[Install](https://github.com/codeguybutbackrooms/files-cutter/releases/tag/files-cutter)](https://img.icons8.com/?size=256&id=12599&format=png)
 
 
 ---
