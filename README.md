@@ -20,9 +20,15 @@ Inspired by `yt-dlp`, built for clean offline media slicing — no pip install r
 ```bash
 python main.py --start-from [START_TIME] --end-at [END_TIME] [OPTIONS] file:[FILENAME]
 ```
-`--start-from`: Specifies the time to begin cutting the file.
-`--end-at`: Specifies the time to stop cutting the file.
-`file`: Specifies which file
+`--start-from`: Specifies the time to begin cutting the file. <br>
+`--end-at`: Specifies the time to stop cutting the file. <br>
+`file`: Specifies which file <br>
+
+## ✅ Optional
+The following options enhance behavior but are not required: <br>
+`--nf`: Stands for new file, forces the output to be saved as a new file to avoid overwriting the original. <br>
+
+
 
 ## ⏱ Accepted Time Formats
 | Format      | Interpreted As     | Notes                                                                 |
