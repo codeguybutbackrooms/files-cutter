@@ -27,7 +27,9 @@ python main.py --start-from [START_TIME] --end-at [END_TIME] [OPTIONS] file:[FIL
 ## ✅ Optional
 The following options enhance behavior but are not required: <br>
 `--nf`: Stands for new file, forces the output to be saved as a new file to avoid overwriting the original. <br>
-`--cus-out-name`: Stands for Custom Output Filename, this will change the output name to anything you want, and automatically behaves like `--nf`. <br>
+`--cus-out-name`: Stands for Custom Output Filename, this will change the output name to anything you want, and automatically behaves like --nf. <br>
+`--help`: Show main commands
+`--help-extra`: Show time formats
 
 
 
