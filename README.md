@@ -5,6 +5,12 @@ Inspired by `yt-dlp`, built for clean offline media slicing — no pip install r
 
 ---
 
+## Installations
+![screenshot.png](https://github.com/codeguybutbackrooms/files-cutter/releases/tag/files-cutter)
+
+
+---
+
 ## ✨ Features
 
 - ✅ Cut media between start and end times
