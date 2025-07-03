@@ -32,8 +32,8 @@
    ```bash
    cd %USERPROFILE%\Downloads
 4. Install the package:
-   ```bash
-pip install moviepy-2.2.1.tar.gz
+   `
+pip install moviepy-2.2.1.tar.gz`
 5. To verify installation:
 <ol>
   <li>Type `python` and press Enter.</li>
