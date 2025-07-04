@@ -2,16 +2,16 @@ import os
 import subprocess
 import shutil
 
-from core import (
+from core.utils import (
     generate_new_filename,
     check_disk_space,
     is_supported_file,
     get_media_duration,
-    parse_time_to_seconds,
-    print_error,
-    build_ffmpeg_command,
-    SUPPORTED_FORMATS
+    parse_time_to_seconds
 )
+from core.error import print_error
+from core.ffmpeg import build_ffmpeg_command
+from core import SUPPORTED_FORMATS
 
 def check_ffmpeg():
     """
