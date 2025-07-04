@@ -1,57 +1,73 @@
-import argparse
-import sys
-from commands.cutter import cut_media
-from core.error import print_error
+import os
+import subprocess
+import shutil
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="🪓 files-cutter — Cut media files using ffmpeg",
-        epilog="Example:\n  python main.py --start-from 0:30 --end-at 1:00 --nf file:video.mp4",
-        formatter_class=argparse.RawTextHelpFormatter
-    )
+from core import (
+    generate_new_filename,
+    check_disk_space,
+    is_supported_file,
+    get_media_duration,
+    parse_time_to_seconds,
+    print_error,
+    build_ffmpeg_command,
+    SUPPORTED_FORMATS
+)
 
-    parser.add_argument('--start-from', type=str, required=True, help="Start time (e.g., 10, 0:30, 00:01:15)")
-    parser.add_argument('--end-at', type=str, required=True, help="End time (e.g., 1:00, 02:00)")
-    parser.add_argument('--nf', action='store_true', help="Force new output filename (avoid overwrite)")
-    parser.add_argument('--cus-out-name', type=str, help="Custom output filename (e.g., myclip.mp4)")
-    parser.add_argument('--version', action='store_true', help="Show version info")
-    parser.add_argument('--help-extra', action='store_true', help="Show detailed help about time formats")
+def check_ffmpeg():
+    """
+    Ensure ffmpeg is available in PATH.
+    """
+    if not shutil.which("ffmpeg"):
+        print_error("ERR_105", "ffmpeg not found. Please install it or add it to your system PATH.")
+    if not shutil.which("ffprobe"):
+        print_error("ERR_105", "ffprobe not found. Please install ffmpeg (which includes ffprobe).")
 
-    parser.add_argument('file', type=str, help="Media file to cut, must begin with 'file:'")
+def cut_media(input_file, start_time, end_time, force_new_file=False, custom_name=None):
+    """
+    Main cutting function. Handles all checks and runs ffmpeg to cut the file.
+    """
+    if not os.path.isfile(input_file):
+        print_error("ERR_100", f"File not found: {input_file}")
 
-    args = parser.parse_args()
+    if not is_supported_file(input_file):
+        print_error("ERR_106", f"Unsupported file format. Supported: {', '.join(SUPPORTED_FORMATS)}")
 
-    # Handle version
-    if args.version:
-        print("files-cutter v1.0.0")
-        sys.exit(0)
+    check_ffmpeg()
+    check_disk_space(input_file)
 
-    # Help for time formats
-    if args.help_extra:
-        print("""
-⏱ Time Format Help:
+    # Check media duration
+    duration = get_media_duration(input_file)
+    if duration is not None:
+        print(f"📏 Media duration: {duration:.2f} seconds")
 
-Valid formats:
-  10           = 10 seconds
-  0:10         = 10 seconds
-  0:0:10       = 10 seconds
-  00:01:30     = 1 minute 30 seconds
-  1:2:3.5      = 1 hour 2 minutes 3.5 seconds
-""")
-        sys.exit(0)
+        start_sec = parse_time_to_seconds(start_time)
+        end_sec = parse_time_to_seconds(end_time)
 
-    # File validation
-    if not args.file.startswith("file:"):
-        print_error("ERR_104", "Missing 'file:' prefix. Example: file:myclip.mp4")
-    input_file = args.file[5:]
+        if start_sec >= duration:
+            print_error("ERR_107", "The specified start time is longer than the media file.")
+        if end_sec > duration:
+            print_error("ERR_108", "The specified end time is longer than the media file.")
+        if start_sec >= end_sec:
+            print_error("ERR_103", "Start time must be earlier than end time.")
 
-    cut_media(
-        input_file=input_file,
-        start_time=args.start_from,
-        end_time=args.end_at,
-        force_new_file=args.nf,
-        custom_name=args.cus_out_name
-    )
+    # Generate output filename
+    if custom_name:
+        output_file = custom_name
+    else:
+        output_file = (
+            generate_new_filename(input_file)
+            if force_new_file
+            else os.path.splitext(input_file)[0] + "_cut" + os.path.splitext(input_file)[1]
+        )
 
-if __name__ == "__main__":
-    main()
+    print(f"▶️ Cutting file: {input_file}")
+    print(f"🕒 From: {start_time} → {end_time}")
+    print(f"💾 Output file: {output_file}")
+
+    command = build_ffmpeg_command(input_file, start_time, end_time, output_file)
+
+    try:
+        subprocess.run(command, check=True)
+        print("✅ Cutting complete!")
+    except subprocess.CalledProcessError:
+        print_error("ERR_102", "Something went wrong while cutting. Please try again.")
