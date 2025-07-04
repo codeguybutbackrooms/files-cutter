@@ -9,19 +9,20 @@ from core import (
     get_media_duration,
     parse_time_to_seconds,
     print_error,
-    build_ffmpeg_command
+    build_ffmpeg_command,
+    SUPPORTED_FORMATS
 )
 
 def check_ffmpeg():
     """
-    Ensure ffmpeg is available in PATH.
+    Ensure ffmpeg and ffprobe are available in PATH.
     """
     if not shutil.which("ffmpeg"):
         print_error("ERR_105", "ffmpeg not found. Please install it or add it to your system PATH.")
     if not shutil.which("ffprobe"):
         print_error("ERR_105", "ffprobe not found. Please install ffmpeg (which includes ffprobe).")
 
-def cut_media(input_file, start_time, end_time, force_new_file=False):
+def cut_media(input_file, start_time, end_time, force_new_file=False, custom_name=None):
     """
     Main cutting function. Handles all checks and runs ffmpeg to cut the file.
     """
@@ -37,6 +38,8 @@ def cut_media(input_file, start_time, end_time, force_new_file=False):
     # Check media duration
     duration = get_media_duration(input_file)
     if duration is not None:
+        print(f"📏 Media duration: {duration:.2f} seconds")
+
         start_sec = parse_time_to_seconds(start_time)
         end_sec = parse_time_to_seconds(end_time)
 
@@ -47,12 +50,15 @@ def cut_media(input_file, start_time, end_time, force_new_file=False):
         if start_sec >= end_sec:
             print_error("ERR_103", "Start time must be earlier than end time.")
 
-    # Generate output filename
-    output_file = (
-        generate_new_filename(input_file)
-        if force_new_file
-        else os.path.splitext(input_file)[0] + "_cut" + os.path.splitext(input_file)[1]
-    )
+    # Determine output file name
+    if custom_name:
+        output_file = custom_name
+    else:
+        output_file = (
+            generate_new_filename(input_file)
+            if force_new_file
+            else os.path.splitext(input_file)[0] + "_cut" + os.path.splitext(input_file)[1]
+        )
 
     print(f"▶️ Cutting file: {input_file}")
     print(f"🕒 From: {start_time} → {end_time}")
