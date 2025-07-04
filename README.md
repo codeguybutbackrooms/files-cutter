@@ -28,7 +28,7 @@ Inspired by `yt-dlp`, built for clean offline media slicing — no pip install r
 ## 🧾 Syntax
 
 ```bash
-files-cutter --start-from [MINUTES:SECONDS] --end-at [MINUTES:SECONDS] file:[NAME].example
+python main.py --start-from [MINUTES:SECONDS] --end-at [MINUTES:SECONDS] file:[NAME].example
 ```
 *Make sure the "file:" and file name does not have space* <br>
 `--start-from`: Specifies the time to begin cutting the file. <br>
