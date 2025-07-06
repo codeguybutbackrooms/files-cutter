@@ -37,6 +37,8 @@ python main.py --start-from [MINUTES:SECONDS] --end-at [MINUTES:SECONDS] file:[N
 
 ## ✅ Optional
 The following options enhance behavior but are not required: <br>
+`--fps`: Sets the output video's frame rate (FPS) with syntax `--fps <value>`, the `<value>` is a integer (number), or default (Keeps the original video FPS, no change)
+`--show-fps`: Show the maximum fps of the video
 `--nf`: Stands for new file, forces the output to be saved as a new file to avoid overwriting the original. <br>
 `--cus-out-name`: Stands for Custom Output Filename, this will change the output name to anything you want, and automatically behaves like --nf. <br>
 `--version`: Show current version of files-cutter <br>
