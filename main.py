@@ -23,7 +23,7 @@ def main():
 
     # Handle version flag
     if args.version:
-        print("files-cutter v1.0.0")
+        print("files-cutter v1.0.1")
         sys.exit(0)
 
     # Show extended time format help
