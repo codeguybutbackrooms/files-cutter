@@ -2,7 +2,7 @@ import argparse
 from commands.cutter import cut_media
 from core.error import print_error
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 def main():
     parser = argparse.ArgumentParser(
