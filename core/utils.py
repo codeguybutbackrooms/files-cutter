@@ -1,6 +1,8 @@
 import os
 import shutil
 import subprocess
+import json
+
 from core import SUPPORTED_FORMATS
 from core.error import print_error
 
@@ -71,6 +73,31 @@ def parse_time_to_seconds(timestr):
         elif len(parts) == 3:
             return parts[0] * 3600 + parts[1] * 60 + parts[2]
         else:
-            return 0
+            print_error("ERR_103", f"Invalid time format: {timestr}")
     except Exception:
         print_error("ERR_103", f"Invalid time format: {timestr}")
+
+def get_fps(file_path):
+    """
+    Use ffprobe to detect original FPS of video.
+    """
+    try:
+        result = subprocess.run(
+            [
+                "ffprobe", "-v", "error",
+                "-select_streams", "v:0",
+                "-show_entries", "stream=r_frame_rate",
+                "-of", "json",
+                file_path
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=True
+        )
+        data = json.loads(result.stdout)
+        rate = data["streams"][0]["r_frame_rate"]
+        num, denom = map(int, rate.split('/'))
+        return num / denom
+    except Exception:
+        raise Exception("Could not read FPS via ffprobe.")
